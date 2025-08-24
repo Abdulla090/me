@@ -302,7 +302,9 @@ export default function ExperienceTimeline({
               return (
                 <div
                   key={item.id}
-                  ref={(el) => (nodeRefs.current[item.id] = el)}
+                  ref={(el) => {
+                    nodeRefs.current[item.id] = el;
+                  }}
                   tabIndex={-1}
                   aria-labelledby={`${nodeId}-title`}
                   className="outline-none"
