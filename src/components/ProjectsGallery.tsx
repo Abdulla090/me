@@ -289,7 +289,7 @@ export default function ProjectsGallery({
 
     const onScroll = () => {
       const engine = emblaApi.internalEngine();
-      const scrollProgress = engine.scrollProgress.get();
+      const scrollProgress = engine.scrollProgress.get(0);
 
       emblaApi.slideNodes().forEach((slideNode, index) => {
         const slideProgress = engine.scrollSnaps[index] - scrollProgress;
