@@ -468,10 +468,12 @@ export default function ProjectsGallery({
               loop: true,
             }}
             className="w-full max-w-6xl mx-auto"
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
             <CarouselContent>
               {filtered.map((p, index) => (
-                <CarouselItem key={index} className="p-2 sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={index} className="p-2">
                   <ProjectCard
                     project={p}
                     onOpen={() => handleOpenProject(p)}
