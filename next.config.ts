@@ -3,6 +3,7 @@ import path from "node:path";
 
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
+// Optimized Next.js configuration for production deployment
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
