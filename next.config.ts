@@ -22,7 +22,6 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    optimizeCss: true,
   },
   outputFileTracingRoot: path.resolve(__dirname, '../../'),
   turbopack: {
