@@ -3,7 +3,6 @@ import path from "node:path";
 
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
-// Optimized Next.js configuration for production deployment
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -16,13 +15,6 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
-    formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  },
-  experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   outputFileTracingRoot: path.resolve(__dirname, '../../'),
   turbopack: {
@@ -31,12 +23,6 @@ const nextConfig: NextConfig = {
         loaders: [LOADER]
       }
     }
-  },
-  compress: true,
-  poweredByHeader: false,
-  generateEtags: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 
