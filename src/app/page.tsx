@@ -21,9 +21,10 @@ export default function HomePage() {
               About My Work
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto px-4">
-              As an AI trainer specializing in machine learning across all domains, I help organizations unlock 
-              the power of artificial intelligence. From fine-tuning large language models to developing computer 
-              vision systems, I transform complex AI concepts into practical, production-ready solutions that drive real business value.
+              As a full-stack developer specializing in modern web applications and AI integration, I create 
+              innovative digital solutions that transform businesses. From responsive React applications to 
+              intelligent AI-powered systems, I combine cutting-edge technology with exceptional user experience 
+              to deliver scalable, high-performance web applications that drive real business value.
             </p>
           </div>
         </section>
@@ -42,8 +43,8 @@ export default function HomePage() {
       </main>
 
       <Footer
-        siteName="Alex Chen Portfolio"
-        tagline="AI Training & Machine Learning Excellence"
+        siteName="Abdulla Portfolio"
+        tagline="Full Stack Development & AI Solutions"
         socials={{
           github: "https://github.com/yourusername",
           linkedin: "https://linkedin.com/in/yourusername",

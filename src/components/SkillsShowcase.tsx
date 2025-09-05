@@ -343,7 +343,7 @@ export default function SkillsShowcase({
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebouncedValue(query, 200);
   const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
-  const [visibleSkills, setVisibleSkills] = React.useState(8);
+  const [visibleSkills, setVisibleSkills] = React.useState(6);
 
   const onToggleCategory = React.useCallback((cat: SkillCategory) => {
     setSelected((prev) => {
@@ -359,6 +359,7 @@ export default function SkillsShowcase({
     setQuery("");
   }, []);
 
+  // Memoize filtered skills for performance
   const filtered = React.useMemo(() => {
     const text = debouncedQuery.trim().toLowerCase();
     const hasCat = selected.length > 0;
@@ -399,36 +400,36 @@ export default function SkillsShowcase({
     <section
       ref={sectionRef}
       className={cx(
-        "w-full bg-[var(--background)]",
-        "py-12 sm:py-16",
+        "w-full max-w-none bg-[var(--background)] overflow-x-hidden",
+        "py-8 sm:py-12 lg:py-16",
         className
       )}
       role="region"
       aria-labelledby="skills-heading">
-      <div className="container max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 sm:mb-10 text-center">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="mb-6 sm:mb-8 lg:mb-10 text-center">
           <h2
             id="skills-heading"
-            className="text-2xl sm:text-3xl lg:text-4xl font-heading font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+            className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-heading font-semibold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Technical Skills & Expertise
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-4">
+          <p className="mt-2 sm:mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4">
             Full-stack development with AI/ML specialization. 
-            Explore by category to see my technical capabilities across different domains.
+            Click on cards to see detailed expertise areas and use "Load More" to explore all skills.
           </p>
         </div>
 
         <div
           ref={toolbarRef}
           className={cx(
-            "flex flex-col gap-4 sm:gap-5",
-            "rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[var(--surface-2)] to-[var(--surface-1)]",
-            "p-3 sm:p-4 lg:p-6 shadow-lg backdrop-blur-sm",
+            "flex flex-col gap-3 sm:gap-4 lg:gap-5",
+            "rounded-xl sm:rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[var(--surface-2)] to-[var(--surface-1)]",
+            "p-2 sm:p-3 lg:p-6 shadow-lg backdrop-blur-sm",
             "transition-all duration-500 ease-out",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
               {CATEGORY_ORDER.map((cat, idx) => (
                 <Toggle
                   key={cat}
@@ -436,8 +437,8 @@ export default function SkillsShowcase({
                   onPressedChange={() => onToggleCategory(cat)}
                   aria-label={`Filter ${cat}`}
                   className={cx(
-                    "h-8 sm:h-10 rounded-full border border-[var(--border)]",
-                    "text-xs sm:text-sm px-3 sm:px-4 lg:px-5 font-medium",
+                    "h-7 sm:h-8 lg:h-10 rounded-full border border-[var(--border)]",
+                    "text-xs sm:text-sm px-2 sm:px-3 lg:px-5 font-medium",
                     "bg-[var(--surface-1)] data-[state=on]:bg-gradient-to-r data-[state=on]:from-accent/20 data-[state=on]:to-accent/10",
                     "hover:bg-[var(--surface-1)]/80 hover:scale-105 active:scale-95",
                     "data-[state=on]:text-[var(--foreground)] data-[state=on]:border-accent/50",
@@ -504,8 +505,8 @@ export default function SkillsShowcase({
 
         <div
           className={cx(
-            "mt-6 sm:mt-8 lg:mt-10",
-            "grid gap-3 sm:gap-4 lg:gap-5",
+            "mt-4 sm:mt-6 lg:mt-8",
+            "grid gap-2 sm:gap-3 lg:gap-4",
             "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           )}>
           <TooltipProvider delayDuration={150}>
@@ -525,7 +526,7 @@ export default function SkillsShowcase({
         {filtered.length > visibleSkills && (
           <div className="mt-8 text-center">
             <button
-              onClick={() => setVisibleSkills(prev => prev + 8)}
+              onClick={() => setVisibleSkills(prev => prev + 6)}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
             >
               Load More
@@ -689,9 +690,9 @@ function SkillCard({
             expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
           )}>
           <div className="overflow-hidden">
-            <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-1">
+            <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-1 border-t border-[var(--border)]/50">
               {skill.notes && skill.notes.length > 0 ? (
-                <ul className="mt-2 space-y-2">
+                <ul className="mt-3 space-y-2">
                   {skill.notes.slice(0, 3).map((n, i) => (
                     <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground">
                       <span className="mt-1.5 sm:mt-2 inline-block h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-gradient-to-r from-accent to-accent/60 shrink-0" />
@@ -700,7 +701,7 @@ function SkillCard({
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs sm:text-sm text-muted-foreground mt-2">Click to explore more details about this expertise area.</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-3">Click to explore more details about this expertise area.</p>
               )}
             </div>
           </div>

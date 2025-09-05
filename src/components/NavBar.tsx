@@ -32,8 +32,6 @@ import {
 } from "@/components/ui/textarea";
 import {
   Menu,
-  Sun,
-  Moon,
   Download,
   Mail,
   ChevronRight
@@ -66,10 +64,6 @@ export default function NavBar({
   const [entered, setEntered] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Theme handling
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [mounted, setMounted] = useState(false);
-
   // Sheets state
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -83,46 +77,23 @@ export default function NavBar({
   });
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
 
-  // Mount effects
-  useEffect(() => {
-    setMounted(true);
-    const saved = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-    const prefersDark =
-      typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    const next = (saved as "dark" | "light") || (prefersDark ? "dark" : "light");
-    setTheme(next);
-    applyTheme(next);
-  }, []);
-
+  // Mount effects - optimized with throttling
   useEffect(() => {
     setEntered(true);
+    let ticking = false;
     const onScroll = () => {
-      setScrolled(window.scrollY > 12);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 12);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const applyTheme = (mode: "dark" | "light") => {
-    const root = document.documentElement;
-    if (mode === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("theme", mode);
-  };
-
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    applyTheme(next);
-    toast.success(`Switched to ${next} mode`);
-  };
 
   // Smooth scroll to anchors with offset for sticky nav
   const handleAnchorClick = useCallback(
@@ -195,18 +166,18 @@ export default function NavBar({
         role="navigation"
         aria-label="Primary"
         className={[
-          "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-out px-2 sm:px-4 lg:px-6",
+          "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-out",
           entered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3",
         ].join(" ")}
       >
         <div
           className={[
-            "container max-w-7xl mx-auto",
-            "flex items-center gap-2 sm:gap-4",
+            "w-full max-w-none",
+            "flex items-center justify-between gap-2 sm:gap-4",
             "h-14 sm:h-16 lg:h-18",
             "bg-gradient-to-r from-secondary/90 via-secondary/85 to-secondary/90",
             "backdrop-blur-md supports-[backdrop-filter]:backdrop-blur-xl",
-            "border-b transition-all duration-300 px-3 sm:px-4 lg:px-6",
+            "border-b transition-all duration-300 px-3 sm:px-6 lg:px-8",
             scrolled 
               ? "border-border/90 shadow-[0_8px_32px_rgba(0,0,0,0.4)] bg-opacity-95" 
               : "border-border/50 shadow-[0_4px_16px_rgba(0,0,0,0.2)]",
@@ -235,7 +206,7 @@ export default function NavBar({
           </a>
 
           {/* Center: Nav links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2 mx-auto">
+          <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-center max-w-2xl mx-auto">
             {anchors.map((item) => (
               <a
                 key={item.id}
@@ -257,33 +228,7 @@ export default function NavBar({
           </div>
 
           {/* Right: Controls */}
-          <div className="ml-auto flex items-center gap-1.5 sm:gap-2 lg:gap-3">
-            {/* Theme toggle */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Toggle theme"
-                  onClick={toggleTheme}
-                  className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl hover:bg-muted/80 focus-visible:ring-2 focus-visible:ring-primary 
-                           focus-visible:ring-offset-2 focus-visible:ring-offset-background 
-                           transition-all duration-200 hover:scale-110 active:scale-95"
-                >
-                  {mounted && theme === "dark" ? (
-                    <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500" aria-hidden="true" />
-                  ) : (
-                    <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400" aria-hidden="true" />
-                  )}
-                  <span className="sr-only">Toggle theme</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-popover text-popover-foreground border-border/60">
-                Switch to {theme === "dark" ? "light" : "dark"} mode
-              </TooltipContent>
-            </Tooltip>
-
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0">
             {/* Resume button */}
             {resumeUrl ? (
               <Tooltip>
@@ -375,22 +320,6 @@ export default function NavBar({
                   <Button className="w-full rounded-lg sm:rounded-xl py-2.5 sm:py-3" onClick={() => setContactOpen(true)}>
                     <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
                     Get In Touch
-                  </Button>
-                </div>
-                <div className="mt-4 sm:mt-6">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={toggleTheme}
-                    className="w-full justify-start rounded-lg sm:rounded-xl py-2.5 sm:py-3"
-                    aria-label="Toggle theme"
-                  >
-                    {mounted && theme === "dark" ? (
-                      <Sun className="mr-3 h-5 w-5 text-amber-500" aria-hidden="true" />
-                    ) : (
-                      <Moon className="mr-3 h-5 w-5 text-indigo-400" aria-hidden="true" />
-                    )}
-                    Switch to {theme === "dark" ? "Light" : "Dark"} Mode
                   </Button>
                 </div>
               </SheetContent>

@@ -48,6 +48,16 @@ type HeroStats = {
   models: number;
 };
 
+// Optimize icon mapping with lazy loading
+const IconMap = {
+  Brain: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Brain }))),
+  Bot: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Bot }))),
+  Zap: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Zap }))),
+  TrendingUp: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.TrendingUp }))),
+  Database: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Database }))),
+  Users: React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Users }))),
+} as const;
+
 export interface HeroHeaderProps {
   name?: string;
   subtitle?: string;
@@ -99,29 +109,29 @@ function useCountUp(target: number, startWhenInView: boolean, duration = 1400) {
 }
 
 const expertiseList = [
-{ name: "AI Model Training", icon: Brain },
-{ name: "Machine Learning", icon: Bot },
-{ name: "Data Science", icon: Database },
-{ name: "AI Strategy", icon: TrendingUp },
-{ name: "Team Training", icon: Users },
-{ name: "MLOps", icon: Zap }] as
+{ name: "Full Stack Development", icon: Brain },
+{ name: "AI Solutions", icon: Bot },
+{ name: "React & Next.js", icon: Database },
+{ name: "Machine Learning", icon: TrendingUp },
+{ name: "TypeScript", icon: Users },
+{ name: "Cloud Architecture", icon: Zap }] as
 const;
 
 const codeLines = [
-"# AI Training Pipeline",
-"def train_model(data, config):",
-"    model = create_transformer(config)",
-"    trainer = Trainer(model, data)",
-"    return trainer.train()",
+"// Modern Web Development",
+"const App = () => {",
+"  const { data } = useAI('/api/predict')",
+"  return <Dashboard data={data} />",
+"}",
 "",
-"# Deploy to production",
-"model = train_model(dataset, config)"];
+"// AI-Powered Features",
+"export default aiEnhanced(App)"];
 
 
 export default function HeroHeader({
   name = "Abdulla",
-  subtitle = "AI Trainer & Machine Learning Specialist",
-  bio = "Specialized in training and deploying AI models across diverse domains. Expert in Front end website, webapp development, and building AI-powered solutions for businesses of all sizes.",
+  subtitle = "Full Stack Developer & AI Solutions Architect",
+  bio = "Specialized in building modern web applications with cutting-edge AI integration. Expert in React, Next.js, TypeScript, and creating intelligent solutions that transform businesses through innovative technology.",
   avatarSrc,
   initials = "AC",
   stats = defaultStats,
@@ -236,7 +246,8 @@ export default function HeroHeader({
     <section
       ref={sectionRef}
       aria-label="Hero header"
-      className="container px-4 sm:px-6 lg:px-8">
+      className="w-full max-w-none px-3 sm:px-6 lg:px-8 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto">
 
       <Card
         className="
@@ -342,7 +353,7 @@ export default function HeroHeader({
                   <DialogHeader>
                     <DialogTitle className="text-lg sm:text-xl font-semibold">Let's Work Together</DialogTitle>
                     <DialogDescription className="text-sm sm:text-base">
-                      Share your AI project or training needs. I'll respond within 24 hours with insights and next steps.
+                      Share your web development or AI integration project needs. I'll respond within 24 hours with insights and next steps.
                     </DialogDescription>
                   </DialogHeader>
                   <form ref={formRef} onSubmit={handleSubmit} className="grid gap-4 sm:gap-5">
@@ -358,7 +369,7 @@ export default function HeroHeader({
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="message" className="text-sm font-medium">Project Details</Label>
-                      <Textarea id="message" name="message" placeholder="Describe your AI training needs, timeline, and goals..." required rows={4}
+                      <Textarea id="message" name="message" placeholder="Describe your web development or AI integration needs, timeline, and goals..." required rows={4}
                       className="border-border/60 focus:border-primary/50" />
                     </div>
                     <DialogFooter className="mt-2 sm:mt-3">
@@ -438,6 +449,7 @@ export default function HeroHeader({
           </motion.div>
         </div>
       </Card>
+      </div>
     </section>);
 
 }

@@ -2,6 +2,53 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
+
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Performance optimization for transforms */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+/* Touch optimizations */
+.touch-action-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-action-manipulation {
+  touch-action: manipulation;
+}
 @theme {
 --color-background: #0c1110;
 --color-foreground: #e9eeec;
@@ -114,23 +161,19 @@ font-family: var(--font-sans);
 }
 @layer base {
 body {
-@apply bg-background text-foreground;
+@apply bg-background text-foreground min-h-screen overflow-x-hidden;
 }
 .container {
 margin-inline: auto;
-padding-inline: 2rem;
+padding-inline: clamp(0.75rem, 5vw, 2rem);
+max-width: 100%;
 }
 }
 @layer base {
-html {
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-text-rendering: optimizeLegibility;
-color-scheme: dark;
-}
 body {
 background-color: var(--color-background);
 color: var(--color-foreground);
+font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 h1, h2, h3, h4 {
 font-family: var(--font-heading);
@@ -144,4 +187,25 @@ small, .text-muted-foreground { color: var(--color-muted-foreground); }
 a { color: var(--color-primary); text-decoration: none; }
 .font-sans { font-family: var(--font-sans); }
 .font-heading { font-family: var(--font-heading); }
+
+/* Responsive image optimizations */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Focus improvements for accessibility and performance */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 }
